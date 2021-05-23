@@ -1,4 +1,4 @@
-<h1 align="center">🚀 Table</h1>
+<h1 align="center">🚀 CATI Tree</h1>
 
 **CATI Tree** *(Category Identification Tree)* - библиотека для реализации идентификации наборов данных на PHP 7.4+
 

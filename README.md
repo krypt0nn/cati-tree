@@ -1,72 +1,71 @@
 <h1 align="center">🚀 CATI Tree</h1>
 
-**CATI Tree** *(Category Identification Tree)* - библиотека для реализации идентификации наборов данных на PHP 7.4+
+**CATI Tree** *(Category Identification Tree)* - library for realization datasets identification in PHP 7.4+
 
-Данная структура данных и реализованный в ней алгоритм придуманы лично мной и наверняка будут работать как куски кусков. Более подробную информацию можно прочесть [здесь](https://twitter.com/krypt0nn/status/1394701165238046724?s=20)
+This data structure and the algorithm implemented in it were invented by me so they certainly will work like pieces of shit. More useful information (in Russian) you can read [here](https://twitter.com/krypt0nn/status/1394701165238046724?s=20)
 
-## Установка
+## Installation
 
 ```
 composer require krypt0nn/cati-tree
 ```
 
-## Пример работы
+## Example of work
+
+### Tree
 
 ```php
-<?php
+$tree = CATI\Tree::train ([
+    'a' => [
+        [1, 2, 3],
+        [1, 2, 4],
+        [5, 6, 7],
+        [6, 7, 8],
+        [2, 3, 6]
+    ],
 
-use CATI\Tree;
+    'b' => [
+        [2, 3, 1]
+    ]
+]);
 
-$tree = (new Tree)
-    # Добавляем примеры приветствий
-    ->addSample ('greeting', [
-        ['hello'],
-        ['hi']
-    ])
-    # Добавляем примеры прощаний
-    ->addSample ('farewell', [
-        ['bye'],
-        ['goodbye']
-    ])
-    # Подгатавливаем (обучаем) дерево к предсказаниям
-    ->prepare ();
+echo 'Training accuracy: '. $tree->acuracy();
 
-echo $tree->predict (['hello', 'world']) ?: 'unknown'; // greeting
-
-echo $tree->predict (['bye']) ?: 'unknown'; // farewell
-
-echo $tree->predict (['something', 'else']) ?: 'unknown'; // unknown
+file_put_contents ('tree.json', json_encode ($tree->export ()));
 ```
-
-В данном примере в качестве `samples` я указал просто слова, хотя на практике туда, конечно, пихать нужно обычные предложения. Структура при вызове метода `prepare` найдёт уникальные черты для каждого предложения и при нахождении их в переданных в метод `predict` списках будет выдавать название какой-то категории. Просто как насрать в подъезде, но ведь работает. А для моих целей ничего сложнее и не надо было
 
 ```php
-<?php
+$tree = CATI\Tree::load (json_decode (file_get_contents ('tree.json'), true));
 
-use CATI\Tree;
-
-$tree = (new Tree)
-    # Добавляем примеры приветствий
-    ->addSample ('greeting', [
-        ['hello'],
-        ['hi']
-    ])
-    # Добавляем примеры прощаний
-    ->addSample ('farewell', [
-        ['bye'],
-        ['goodbye']
-    ])
-    # Подгатавливаем (обучаем) дерево к предсказаниям
-    ->prepare ();
-
-# Сохраняем паттерны идентификации
-$patterns = $tree->getPatterns ();
-
-# Создаём новое дерево и сразу пихаем в него данные после обучения,
-# чтобы не делать это второй раз. Обратите внимание, что
-# dataset и labels (то есть training samples) будут пусты и их
-# нужно подгружать вручную
-$tree = new Tree ($patterns);
+echo $tree->predict ([6, 7, 8]) ?: 'unknown'; // a
 ```
 
-Автор: [Подвирный Никита](https://vk.com/technomindlp)
+### Random forest
+
+```php
+$forest = CATI\RandomForest::create ([
+    'a' => [
+        [1, 2, 3],
+        [1, 2, 4],
+        [5, 6, 7],
+        [6, 7, 8],
+        [2, 3, 6]
+    ],
+
+    'b' => [
+        [2, 3, 1]
+    ]
+], forestSize: 5);
+
+echo 'Training accuracy: '. $forest->acuracy();
+
+file_put_contents ('forest.json', json_encode ($forest->export ()));
+```
+
+```php
+$forest = CATI\RandomForest::load (json_decode (file_get_contents ('forest.json'), true));
+
+print_r ($forest->probability ([6, 7, 8]));
+```
+
+Author: [Nikita Podvirnyy](https://vk.com/technomindlp)

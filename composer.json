@@ -1,7 +1,7 @@
 {
     "name": "krypt0nn/cati-tree",
     "description": "Category Identification Tree",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "homepage": "https://github.com/KRypt0nn/cati-tree",
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "files": [
-            "Tree.php"
+            "cati-tree.php"
         ]
     }
 }

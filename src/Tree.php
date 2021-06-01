@@ -178,13 +178,14 @@ class Tree
                     $used[$tuple][$normalizedFeature] = ($used[$tuple][$normalizedFeature] ?? 0) + 1;
                 }
 
-            usort ($totalSamples[$categoryName], function ($a, $b) use ($used)
-            {
-                $a = $used[(int) is_array ($a)][is_array ($a) ? join ($a) : $a];
-                $b = $used[(int) is_array ($b)][is_array ($b) ? join ($b) : $b];
+            if (($totalSamples[$categoryName] ?? null) !== null)
+                usort ($totalSamples[$categoryName], function ($a, $b) use ($used)
+                {
+                    $a = $used[(int) is_array ($a)][is_array ($a) ? join ($a) : $a];
+                    $b = $used[(int) is_array ($b)][is_array ($b) ? join ($b) : $b];
 
-                return $b <=> $a;
-            });
+                    return $b <=> $a;
+                });
         }
 
         return $totalSamples;

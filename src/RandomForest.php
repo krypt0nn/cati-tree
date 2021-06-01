@@ -46,7 +46,7 @@ class RandomForest
         $samplesAmount = sizeof ($totalSamples);
         $totalAccuracy = 0;
 
-        $forestSize = 1 + round (sqrt (pow ($samplesAmount, 1.4)));
+        $forestSize ??= 1 + round (sqrt (pow ($samplesAmount, 1.4)));
 
         $thresholdMultiplier = (int)('1'. str_repeat ('0', max (strlen ($minThreshold), strlen ($maxThreshold)) - 2));
         $minThreshold *= $thresholdMultiplier;
@@ -56,7 +56,7 @@ class RandomForest
         {
             $taken = [];
 
-            for ($j = 0, $c = rand ($minThreshold, $maxThreshold) * $samplesAmount / $thresholdMultiplier; $j < $c; ++$j)
+            for ($j = 0, $c = max (min (rand ($minThreshold, $maxThreshold) * $samplesAmount / $thresholdMultiplier, $samplesAmount), 1); $j < $c; ++$j)
             {
                 do
                 {

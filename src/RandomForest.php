@@ -145,15 +145,15 @@ class RandomForest
     /**
      * Load model from attributes
      * 
-     * @param array $features
+     * @param array $trees
      * [@param float $accuracy = 1]
      * 
      * @return self
      */
     public static function load (array $trees, float $accuracy = 1): self
     {
-        return isset ($features['trees']) && isset ($features['accuracy']) ?
-            new self ($features['trees'], $features['accuracy']) :
-            new self ($features, $accuracy);
+        return isset ($trees['trees']) && isset ($trees['accuracy']) ?
+            new self (array_map (fn ($tree) => Tree::load ($tree), $trees['trees']), $trees['accuracy']) :
+            new self (array_map (fn ($tree) => Tree::load ($tree), $trees), $accuracy);
     }
 }

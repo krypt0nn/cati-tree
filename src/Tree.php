@@ -145,7 +145,7 @@ class Tree
     {
         $vatiants = [];
 
-        for ($i = 1, $l = sizeof ($items); $i < $l; ++$i)
+        for ($i = 1, $l = sizeof ($items); $i <= $l; ++$i)
             for ($j = 0; $j < $l - $i + 1; ++$j)
                 $vatiants[] = $i == 1 ? $items[$j] : array_slice ($items, $j, $i);
 
